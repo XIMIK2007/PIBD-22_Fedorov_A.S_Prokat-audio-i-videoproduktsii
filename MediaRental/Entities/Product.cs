@@ -4,8 +4,12 @@ namespace MediaRental.Entities;
 
 public class Product
 {
+    protected Product() { }
+
+    [System.ComponentModel.DataAnnotations.Key]
     public int Id { get; private set; }
 
+    [System.ComponentModel.DataAnnotations.Required]
     public string Title { get; private set; } = string.Empty;
 
     public string InventoryNumber { get; private set; } = string.Empty;
@@ -20,6 +24,7 @@ public class Product
 
     public string Actors { get; private set; } = string.Empty;
 
+    [System.ComponentModel.DataAnnotations.Schema.Column(TypeName = "numeric(12,2)")]
     public decimal DailyPrice { get; private set; }
 
     public static Product CreateEntity(int id, string? title, string? inventoryNumber, ProductType productType, DiscFormat discFormat, Genre genres, string? performers, string? actors, decimal dailyPrice)

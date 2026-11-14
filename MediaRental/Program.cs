@@ -1,5 +1,7 @@
 ﻿using MediaRental.Forms;
 using Unity;
+using MediaRental.Data;
+using Serilog;
 
 namespace MediaRental;
 
@@ -9,7 +11,18 @@ internal static class Program
     private static void Main()
     {
         ApplicationConfiguration.Initialize();
-        using IUnityContainer container = ContainerConfig.CreateContainer();
-        Application.Run(container.Resolve<MainForm>());
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(DataContext.ReadConfiguration())
+            .CreateLogger();
+
+        try
+        {
+            using IUnityContainer container = ContainerConfig.CreateContainer(Log.Logger);
+            Application.Run(container.Resolve<MainForm>());
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
     }
 }
